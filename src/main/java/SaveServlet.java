@@ -23,13 +23,15 @@ public class SaveServlet extends HttpServlet {
 
     String name = request.getParameter("name");
     String breed = request.getParameter("breed");
-    String owner = request.getParameter("owner");
+    int food = Integer.parseInt(request.getParameter("food"));
+    String SicksAndIssues = request.getParameter("sicksandissues");
 
     var dog = new Dog();
 
         dog.setName(name);
         dog.setBreed(breed);
-        dog.setOwner(owner);
+        dog.setSicksandissues(SicksAndIssues);
+        dog.setFood(food);
 
     out.println(dog);
     out.println(DogRepository.getConnection());

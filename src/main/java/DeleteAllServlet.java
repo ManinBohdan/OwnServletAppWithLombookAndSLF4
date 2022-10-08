@@ -6,23 +6,26 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
+
 @Slf4j
 
-@WebServlet("/deleteServlet")
-public class DeleteServlet extends HttpServlet {
+@WebServlet("/deleteAllServlet")
+public class DeleteAllServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String sid = request.getParameter("id");
         // Refactored
-        try {int id = Integer.parseInt(sid);
-            DogRepository.delete(id);
+        try {
+            DogRepository.deleteAll();
             log.info("Deleting ID");
         }
-        catch (NumberFormatException nfe) {
-            log.warn("Id can't be anything else except an int");
+         catch (SQLException e) {
+            log.error(e.getMessage(),e);
+            throw new RuntimeException(e);
         }
         // Refactored
-        response.sendRedirect("viewAllServlet");
+        log.info("Show All obj");
+        //response.sendRedirect("viewAllServlet");
     }
 }

@@ -23,13 +23,15 @@ public class PutServlet extends HttpServlet {
 
         String name = request.getParameter("name");
         String breed = request.getParameter("breed");
+        String sicksandissues = request.getParameter("sicksandissues");
+        int food = Integer.parseInt(request.getParameter("food"));
 
         var dog = new Dog();
         dog.setId(id);
         dog.setName(name);
         dog.setBreed(breed);
-        dog.setOwner(request.getParameter("owner"));
-
+        dog.setSicksandissues(sicksandissues);
+        dog.setFood(food);
         int status = DogRepository.update(dog);
 
         if (status > 0) {

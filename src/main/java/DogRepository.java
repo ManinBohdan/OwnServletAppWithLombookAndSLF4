@@ -36,10 +36,11 @@ public class DogRepository {
         int status = 0;
         try {
             Connection connection = DogRepository.getConnection();
-            PreparedStatement ps = connection.prepareStatement("insert into entities(name,breed,owner) values (?,?,?)");
+            PreparedStatement ps = connection.prepareStatement("insert into entities(name,breed,sicksandissues,food) values (?,?,?,?)");
             ps.setString(1, dog.getName());
             ps.setString(2, dog.getBreed());
-            ps.setString(3, dog.getOwner());
+            ps.setString(3, dog.getSicksandissues());
+            ps.setInt(4, dog.getFood());
 
             logger.debug("Test");
             status = ps.executeUpdate();
@@ -47,6 +48,7 @@ public class DogRepository {
 
         } catch (SQLException ex) {
             ex.printStackTrace();
+            log.info("Error");
         }
         return status;
     }
@@ -57,11 +59,12 @@ public class DogRepository {
 
         try {
             Connection connection = DogRepository.getConnection();
-            PreparedStatement ps = connection.prepareStatement("update entities set name=?,breed=?,owner=? where id=?");
+            PreparedStatement ps = connection.prepareStatement("update entities set name=?,breed=?sicksandissues=?,food=? where id=?");
             ps.setString(1, dog.getName());
             ps.setString(2, dog.getBreed());
-            ps.setString(3, dog.getOwner());
-            ps.setInt(4, dog.getId());
+            ps.setString(3, dog.getSicksandissues());
+            ps.setInt(4,dog.getFood());
+            ps.setInt(5, dog.getId());
 
             status = ps.executeUpdate();
             connection.close();
@@ -91,6 +94,16 @@ public class DogRepository {
         return status;
     }
 
+    public static void deleteAll  () throws SQLException {
+        try {Connection connection = DogRepository.getConnection();
+        PreparedStatement ps = connection.prepareStatement("DELETE FROM entities");
+        ps.executeQuery();
+        connection.close();}
+        catch (SQLException exception) {
+        exception.printStackTrace();
+        }
+    }
+
     public static Dog getDogById(int id) {
 
         var dog = new Dog();
@@ -104,7 +117,8 @@ public class DogRepository {
                 dog.setId(rs.getInt(1));
                 dog.setName(rs.getString(2));
                 dog.setBreed(rs.getString(3));
-                dog.setOwner(rs.getString(4));
+                dog.setSicksandissues(rs.getString(4));
+                dog.setFood(rs.getInt(5));
             }
             connection.close();
 
@@ -129,7 +143,10 @@ public class DogRepository {
                 dog.setId(rs.getInt(1));
                 dog.setName(rs.getString(2));
                 dog.setBreed(rs.getString(3));
-                dog.setOwner(rs.getString(4));
+                dog.setSicksandissues(rs.getString(4));
+                dog.setFood(rs.getInt(5));
+
+
                 listDogs.add(dog);
             }
             connection.close();
